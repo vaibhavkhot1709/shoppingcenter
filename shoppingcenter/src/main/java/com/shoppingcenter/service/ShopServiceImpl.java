@@ -1,6 +1,7 @@
 package com.shoppingcenter.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,9 +16,17 @@ public class ShopServiceImpl implements ShopService {
 	ShopDaoImpl ShopDaoImpl;
 	
 	@Override
-	public Shop saveShop(Shop Shop) {
-				Shop savedData = ShopDaoImpl.saveShop(Shop);
-				return savedData;
+	public Shop saveShop(Shop shop) {
+		
+		List<Shop>existingShops=getAllShop();
+		ShopDaoImpl.getShopByName(shop.getShopName());
+		Boolean flag = existingShops.stream().filter(s-> s.getShopName().equals(shop.getShopName())).findAny().isPresent();
+		if(flag) {
+			System.out.println("Object are stored into Db :: "+shop);
+		}
+		List<String> shopName=existingShops.stream().map(s-> s.getShopName()).collect(Collectors.toList());
+		Shop savedData = ShopDaoImpl.saveShop(shop);
+		return savedData;
 	}
 
 	@Override
