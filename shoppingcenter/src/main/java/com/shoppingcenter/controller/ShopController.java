@@ -35,8 +35,9 @@ public class ShopController {
 		return ResponseEntity.ok(shopServiceImpl.getAllShop());
 	}
 	
-	@GetMapping("/shop/{shopId}")
-	public ResponseEntity<Shop> getShopById(@PathVariable("shopId") int shopId){
+	@GetMapping("/shop/{shop_id}")
+	public ResponseEntity<Shop> getShopById(@PathVariable("shop_id") int shopId){
+		System.out.println();
 		return ResponseEntity.ok(shopServiceImpl.getShopById(shopId));
 	}
 

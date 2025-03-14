@@ -16,10 +16,7 @@ public class ShopServiceImpl implements ShopService {
 	
 	@Override
 	public Shop saveShop(Shop Shop) {
-		
-		 
 				Shop savedData = ShopDaoImpl.saveShop(Shop);
-				System.out.println("****Checking Data after saved:****"+ savedData);
 				return savedData;
 	}
 

@@ -19,4 +19,7 @@ public interface ShopDao {
 	
 	public List<Shop> saveListOfShop(List<Shop> list);
 	
+	
+	public Shop getShopByName(String name);
+	
 }

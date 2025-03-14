@@ -60,5 +60,10 @@ public class ShopDaoImpl implements ShopDao {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	public Shop getShopByName(String name) {
+		
+		return null;
+	}
 
 }
