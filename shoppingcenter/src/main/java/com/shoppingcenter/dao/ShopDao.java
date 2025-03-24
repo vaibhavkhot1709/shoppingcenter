@@ -21,5 +21,6 @@ public interface ShopDao {
 	
 	
 	public Shop getShopByName(String name);
+	public void deletShopByName(String shopName);
 	
 }

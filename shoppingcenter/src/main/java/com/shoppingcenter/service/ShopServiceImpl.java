@@ -1,62 +1,85 @@
 package com.shoppingcenter.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.shoppingcenter.dao.ShopDaoImpl;
 import com.shoppingcenter.entity.Shop;
+import com.shoppingcenter.exception.NoDataInDatabase;
+import com.shoppingcenter.exception.ShopExistsException;
+import com.shoppingcenter.exception.ShopNotExistsException;
+import com.shoppingcenter.repositories.ShopsRepo;
 
 @Service
 public class ShopServiceImpl implements ShopService {
 
 	@Autowired
-	ShopDaoImpl ShopDaoImpl;
+	ShopDaoImpl shopDaoImpl;
+	private final ShopsRepo shopsRepo;
+	
+	public ShopServiceImpl(ShopsRepo shopsRepo) {
+        this.shopsRepo = shopsRepo;
+    }
 	
 	@Override
 	public Shop saveShop(Shop shop) {
 		
-		List<Shop>existingShops=getAllShop();
-		ShopDaoImpl.getShopByName(shop.getShopName());
-		Boolean flag = existingShops.stream().filter(s-> s.getShopName().equals(shop.getShopName())).findAny().isPresent();
-		if(flag) {
-			System.out.println("Object are stored into Db :: "+shop);
+		List<Shop>  existingShopsByName= shopsRepo.getAllShopsByName(shop.getShopName());
+
+		if(!existingShopsByName.isEmpty()) {
+			throw new ShopExistsException("Shop already exist with name :"+ shop.getShopName());
 		}
-		List<String> shopName=existingShops.stream().map(s-> s.getShopName()).collect(Collectors.toList());
-		Shop savedData = ShopDaoImpl.saveShop(shop);
-		return savedData;
+		return shopDaoImpl.saveShop(shop);
 	}
 
 	@Override
-	public Shop getShopById(int shopId) {
-		
-		return ShopDaoImpl.getShopById(shopId);
+	public Shop getShopById(int shopId) {		
+		Shop sh=shopDaoImpl.getShopById(shopId);
+		if(sh==null) {
+			throw new ShopNotExistsException("Shop is not exists with id: "+shopId);
+		}
+		return sh;
 	}
 
 	@Override
 	public List<Shop> getAllShop() {
-		
-		return ShopDaoImpl.getAllShop();
+		List<Shop> sh=shopDaoImpl.getAllShop();
+		if(sh==null) {
+			throw new NoDataInDatabase("No data in Database");
+		}
+		return shopDaoImpl.getAllShop();
 	}
 
 	@Override
 	public void deletShopById(int shopId) {
-		ShopDaoImpl.deletShopById(shopId);
+		
+		if(shopDaoImpl.getShopById(shopId)==null) {
+			throw new ShopNotExistsException("Shop is not exists with id: "+shopId);
+		}
+		
+		shopDaoImpl.deletShopById(shopId);
+		
 		
 	}
 
 	@Override
 	public void deleteAllShop() {
-		ShopDaoImpl.deleteAllShop();
+		List<Shop> sh=shopDaoImpl.getAllShop();
+		if(sh==null) {
+			throw new NoDataInDatabase("No data in Database");
+		}
+		shopDaoImpl.deleteAllShop();
 		
 	}
 
 	@Override
 	public Shop updateShopById(int shopId, Shop Shop) {
-		
-		return ShopDaoImpl.updateShopById(shopId, Shop);
+		if(shopDaoImpl.getShopById(shopId)==null) {
+			throw new ShopNotExistsException("Shop is not exists with id: "+shopId);
+		}
+		return shopDaoImpl.updateShopById(shopId, Shop);
 	}
 
 	@Override

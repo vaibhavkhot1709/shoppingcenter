@@ -12,41 +12,40 @@ import com.shoppingcenter.repositories.ShopsRepo;
 public class ShopDaoImpl implements ShopDao {
 
 	@Autowired
-	ShopsRepo ShopRepo;
+	ShopsRepo shopRepo;
 	@Override
 	public Shop saveShop(Shop Shop) {
 		
-		return ShopRepo.save(Shop);
+		return shopRepo.save(Shop);
 	}
 
 	@Override
 	public Shop getShopById(int shopId) {
-		
-		return ShopRepo.getReferenceById(shopId);
+		return shopRepo.getReferenceById(shopId);
+//		return shopRepo.findById(shopId).orElseThrow(() -> new ShopNotExistsException("Shop not exists with ID: " + shopId));
 	}
 
 	@Override
 	public List<Shop> getAllShop() {
-		
-		return ShopRepo.findAll();
+		return shopRepo.findAll();
 	}
 
 	@Override
 	public void deletShopById(int shopId) {
-		ShopRepo.deleteById(shopId);
+		shopRepo.deleteById(shopId);
 		
 	}
 
 	@Override
 	public void deleteAllShop() {
-		ShopRepo.deleteAll();
+		shopRepo.deleteAll();
 		
 	}
 
 	@Override
 	public Shop updateShopById(int shopId, Shop Shop) {
 		
-		return ShopRepo.save(Shop);
+		return shopRepo.save(Shop);
 	}
 
 	@Override
@@ -61,9 +60,14 @@ public class ShopDaoImpl implements ShopDao {
 		return null;
 	}
 	
+	@Override
 	public Shop getShopByName(String name) {
 		
 		return null;
 	}
 
+	@Override
+	public void deletShopByName(String shopName) {
+		
+	}
 }

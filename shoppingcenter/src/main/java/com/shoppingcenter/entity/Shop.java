@@ -32,6 +32,7 @@ public class Shop {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int shopId;
 	
+	
 	private String shopName;  
 	
 	private int floorNo;
