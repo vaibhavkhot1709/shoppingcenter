@@ -19,4 +19,7 @@ public interface ShopsRepo extends JpaRepository<Shop, Integer> {
 	
 	@Query("select s from Shop s WHERE s.shopId= :id")
 	public Shop getAllShopsByShopId(@Param("id") int shopId);
+	
+	@Query("SELECT s.shopName FROM Shop s")
+	List<String> getAllShopNames();
 }

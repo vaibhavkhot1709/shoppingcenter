@@ -1,6 +1,7 @@
 package com.shoppingcenter.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,11 +34,35 @@ public class ShopServiceImpl implements ShopService {
 		}
 		return shopDaoImpl.saveShop(shop);
 	}
+	
+	
+	public List<Shop> saveListOfShops(List<Shop> listOfShops) {
+		
+		System.out.println("inside service");
+		
+		List<String>  existingShopsName= shopsRepo.getAllShopNames();
+		
+		System.out.println(" existingShopsName >>   "+existingShopsName);
+		 List<String> newShopNames = listOfShops.stream()
+                 .map(Shop::getShopName)
+                 .collect(Collectors.toList());
+		 
+		 List<String> duplicateShopNames = newShopNames.stream()
+                 .filter(existingShopsName::contains)
+                 .collect(Collectors.toList());
+	
+
+		if (!duplicateShopNames.isEmpty()) {
+			throw new ShopExistsException("This Shops  already exist with name :"+ duplicateShopNames.toString());
+		}
+		return shopDaoImpl.saveListOfShops(listOfShops);
+	}
 
 	@Override
-	public Shop getShopById(int shopId) {		
+	public Shop getShopById(int shopId) {	
 		Shop sh=shopDaoImpl.getShopById(shopId);
 		if(sh==null) {
+			System.out.println("inside IF >>");
 			throw new ShopNotExistsException("Shop is not exists with id: "+shopId);
 		}
 		return sh;
@@ -59,9 +84,7 @@ public class ShopServiceImpl implements ShopService {
 			throw new ShopNotExistsException("Shop is not exists with id: "+shopId);
 		}
 		
-		shopDaoImpl.deletShopById(shopId);
-		
-		
+		shopDaoImpl.deletShopById(shopId);		
 	}
 
 	@Override
@@ -71,15 +94,18 @@ public class ShopServiceImpl implements ShopService {
 			throw new NoDataInDatabase("No data in Database");
 		}
 		shopDaoImpl.deleteAllShop();
-		
 	}
 
 	@Override
-	public Shop updateShopById(int shopId, Shop Shop) {
+	public Shop updateShopById(int shopId, Shop shop) {
+		
 		if(shopDaoImpl.getShopById(shopId)==null) {
 			throw new ShopNotExistsException("Shop is not exists with id: "+shopId);
+		}else {
+			shop.setShopId(shopId);
 		}
-		return shopDaoImpl.updateShopById(shopId, Shop);
+		
+		return shopDaoImpl.updateShopById(shopId, shop);
 	}
 
 	@Override

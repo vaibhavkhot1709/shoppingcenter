@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.shoppingcenter.entity.Shop;
+import com.shoppingcenter.exception.ShopNotExistsException;
 import com.shoppingcenter.repositories.ShopsRepo;
 
 @Component
@@ -20,9 +21,15 @@ public class ShopDaoImpl implements ShopDao {
 	}
 
 	@Override
+	public List<Shop> saveListOfShops(List<Shop> listOfShops){
+		
+		System.out.println("inside dao");
+		return shopRepo.saveAll(listOfShops);
+	}
+	@Override
 	public Shop getShopById(int shopId) {
-		return shopRepo.getReferenceById(shopId);
-//		return shopRepo.findById(shopId).orElseThrow(() -> new ShopNotExistsException("Shop not exists with ID: " + shopId));
+//		return shopRepo.getReferenceById(shopId);
+		return shopRepo.findById(shopId).orElseThrow(() -> new ShopNotExistsException("Shop not exists with ID: " + shopId));
 	}
 
 	@Override
@@ -45,6 +52,7 @@ public class ShopDaoImpl implements ShopDao {
 	@Override
 	public Shop updateShopById(int shopId, Shop Shop) {
 		
+//		shopRepo.s
 		return shopRepo.save(Shop);
 	}
 

@@ -8,6 +8,7 @@ public interface ShopService {
 
 	
 	public Shop saveShop(Shop Shop);
+	public List<Shop> saveListOfShops(List<Shop> listOfShops);
 	public Shop getShopById(int stdId);
 	public List<Shop> getAllShop();
 	public void deletShopById(int stdId);

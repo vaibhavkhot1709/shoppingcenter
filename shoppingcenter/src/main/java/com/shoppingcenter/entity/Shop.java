@@ -2,6 +2,8 @@ package com.shoppingcenter.entity;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -26,13 +28,13 @@ import lombok.ToString;
 
 @Entity
 @Table(name="Shop")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Shop {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int shopId;
-	
-	
+		
 	private String shopName;  
 	
 	private int floorNo;
